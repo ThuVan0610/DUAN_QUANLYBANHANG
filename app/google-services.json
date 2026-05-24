@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "94624262719",
+    "project_id": "duanquanlybanhang",
+    "storage_bucket": "duanquanlybanhang.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94624262719:android:61a31d2b699e988e91668a",
+        "android_client_info": {
+          "package_name": "van.edu.duanquanlybanhang"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSPPUEp6O2Z_l5uQ5pvBC1ZVThl5KSnIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
