@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuDashboard"
+        android:title="Dashboard"/>
+
+    <item
+        android:id="@+id/menuBills"
+        android:title="Hóa đơn"/>
+
+    <item
+        android:id="@+id/menuLogout"
+        android:title="Đăng xuất"/>
+    <item
+        android:id="@+id/menuDark"
+        android:title="Dark Mode"/>
+    <item
+        android:id="@+id/menuLight"
+        android:title="Light Mode"/>
+
+</menu>

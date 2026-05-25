@@ -46,7 +46,7 @@ public class AddProductActivity extends AppCompatActivity {
                             edtQuantity.getText().toString());
 
             Product product =
-                    new Product(id, name, price, quantity, "cafe");
+                    new Product(id, name, price, quantity, "cafesua");
 
             databaseReference.child(id)
                     .setValue(product)

@@ -50,7 +50,7 @@ public class UpdateProductActivity extends AppCompatActivity {
                             edtQuantity.getText().toString());
 
             Product product =
-                    new Product(id, name, price, quantity, "cafe");
+                    new Product(id, name, price, quantity, "cafesua");
 
             FirebaseDatabase.getInstance()
                     .getReference("Products")
