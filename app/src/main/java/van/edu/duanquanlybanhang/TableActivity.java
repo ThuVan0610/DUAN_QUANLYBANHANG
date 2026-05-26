@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class TableActivity extends AppCompatActivity {
+public class TableActivity
+        extends AppCompatActivity {
 
     RecyclerView recyclerTable;
 
-    ArrayList<TableCafe> list;
+    ArrayList<Table> list;
 
     TableAdapter adapter;
 
@@ -25,29 +26,20 @@ public class TableActivity extends AppCompatActivity {
                 findViewById(R.id.recyclerTable);
 
         recyclerTable.setLayoutManager(
-                new GridLayoutManager(this, 2));
+                new GridLayoutManager(this,2));
 
         list = new ArrayList<>();
 
-        list.add(new TableCafe(
-                "1",
-                "Bàn 1",
-                "Trống"));
-
-        list.add(new TableCafe(
-                "2",
-                "Bàn 2",
-                "Có khách"));
-
-        list.add(new TableCafe(
-                "3",
-                "Bàn 3",
-                "Trống"));
-
-        list.add(new TableCafe(
-                "4",
-                "Bàn 4",
-                "Có khách"));
+        list.add(new Table("MANG VỀ"));
+        list.add(new Table("BÀN 1"));
+        list.add(new Table("BÀN 2"));
+        list.add(new Table("BÀN 3"));
+        list.add(new Table("BÀN 4"));
+        list.add(new Table("BÀN 5"));
+        list.add(new Table("BÀN 6"));
+        list.add(new Table("BÀN 7"));
+        list.add(new Table("BÀN 8"));
+        list.add(new Table("BÀN 9"));
 
         adapter = new TableAdapter(list);
 

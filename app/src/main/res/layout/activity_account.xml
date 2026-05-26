@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF8E8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
+
+        <!-- ẢNH QUÁN -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/anhquan"/>
+
+        <!-- TÊN QUÁN -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nora Coffee Roastery"
+            android:textColor="#4E342E"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
+
+        <!-- CHỌN BÀN -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/layoutTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="☕ Chọn bàn"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#4E342E"
+                android:padding="20dp"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- LỊCH SỬ ĐƠN HÀNG -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/layoutHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📋 Lịch sử đơn hàng"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#4E342E"
+                android:padding="20dp"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- BÁO CÁO -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/layoutReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📊 Báo cáo cuối ngày"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#4E342E"
+                android:padding="20dp"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ĐĂNG XUẤT -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/layoutLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🚪 Đăng xuất"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#D32F2F"
+                android:padding="20dp"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</ScrollView>

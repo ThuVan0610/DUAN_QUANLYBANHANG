@@ -1,9 +1,9 @@
 package van.edu.duanquanlybanhang;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,12 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class ProductAdapter
-        extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+        extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
 
     ArrayList<Product> list;
 
-    public ProductAdapter(ArrayList<Product> list) {
+    OnAddClickListener listener;
+
+    public interface OnAddClickListener{
+
+        void onAdd(Product product);
+    }
+
+    public ProductAdapter(ArrayList<Product> list,
+                          OnAddClickListener listener){
+
         this.list = list;
+        this.listener = listener;
     }
 
     @NonNull
@@ -27,10 +37,12 @@ public class ProductAdapter
             @NonNull ViewGroup parent,
             int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product,
-                        parent,
-                        false);
+        View view =
+                LayoutInflater.from(parent.getContext())
+                        .inflate(
+                                R.layout.item_product,
+                                parent,
+                                false);
 
         return new ProductViewHolder(view);
     }
@@ -42,92 +54,61 @@ public class ProductAdapter
 
         Product product = list.get(position);
 
-        holder.txtName.setText(product.getName());
+        holder.txtName.setText(
+                product.getName());
 
         holder.txtPrice.setText(
-                "Giá: " + product.getPrice() + "đ");
+                product.getPrice() + "đ");
 
-        holder.txtQuantity.setText(
-                "Số lượng: " + product.getQuantity());
+        int imageRes =
+                holder.itemView.getContext()
+                        .getResources()
+                        .getIdentifier(
+                                product.getImage(),
+                                "drawable",
+                                holder.itemView
+                                        .getContext()
+                                        .getPackageName());
 
-        // HIỂN THỊ ẢNH
-        int imageResource = holder.itemView.getContext()
-                .getResources()
-                .getIdentifier(
-                        product.getImage(),
-                        "drawable",
-                        holder.itemView.getContext()
-                                .getPackageName());
+        holder.imgProduct.setImageResource(imageRes);
 
-        holder.imgProduct.setImageResource(imageResource);
+        holder.btnAdd.setOnClickListener(v -> {
 
-        // CLICK SỬA
-        holder.itemView.setOnClickListener(v -> {
-
-            Intent intent =
-                    new Intent(
-                            holder.itemView.getContext(),
-                            UpdateProductActivity.class);
-
-            intent.putExtra("id", product.getId());
-            intent.putExtra("name", product.getName());
-
-            intent.putExtra("price",
-                    String.valueOf(product.getPrice()));
-
-            intent.putExtra("quantity",
-                    String.valueOf(product.getQuantity()));
-
-            holder.itemView.getContext()
-                    .startActivity(intent);
-
-        });
-
-        // NHẤN GIỮ XÓA
-        holder.itemView.setOnLongClickListener(v -> {
-
-            new android.app.AlertDialog.Builder(
-                    holder.itemView.getContext())
-
-                    .setTitle("Xóa sản phẩm")
-                    .setMessage("Bạn có muốn xóa sản phẩm này?")
-
-                    .setPositiveButton("Xóa",
-                            (dialog, which) -> {
-
-                                com.google.firebase.database.FirebaseDatabase
-                                        .getInstance()
-                                        .getReference("Products")
-                                        .child(product.getId())
-                                        .removeValue();
-
-                            })
-
-                    .setNegativeButton("Hủy", null)
-                    .show();
-
-            return true;
+            listener.onAdd(product);
         });
     }
 
     @Override
     public int getItemCount() {
+
         return list.size();
     }
 
     public static class ProductViewHolder
-            extends RecyclerView.ViewHolder {
+            extends RecyclerView.ViewHolder{
 
-        TextView txtName, txtPrice, txtQuantity;
         ImageView imgProduct;
 
-        public ProductViewHolder(@NonNull View itemView) {
+        TextView txtName, txtPrice;
+
+        Button btnAdd;
+
+        public ProductViewHolder(
+                @NonNull View itemView) {
+
             super(itemView);
 
-            txtName = itemView.findViewById(R.id.txtName);
-            txtPrice = itemView.findViewById(R.id.txtPrice);
-            txtQuantity = itemView.findViewById(R.id.txtQuantity);
-            imgProduct = itemView.findViewById(R.id.imgProduct);
+            imgProduct =
+                    itemView.findViewById(R.id.imgProduct);
+
+            txtName =
+                    itemView.findViewById(R.id.txtName);
+
+            txtPrice =
+                    itemView.findViewById(R.id.txtPrice);
+
+            btnAdd =
+                    itemView.findViewById(R.id.btnAdd);
         }
     }
 }

@@ -1,229 +1,133 @@
 package van.edu.duanquanlybanhang;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class OrderActivity extends AppCompatActivity {
 
-    TextView txtTable, txtTotal;
+    TextView txtTable;
+    RecyclerView recyclerProduct;
+    Button btnClear, btnViewCart;
 
-    Button btnCafe, btnTraDao, btnPayment;
+    public static String currentTable = "";
+    public static ArrayList<CartItem> cartList = new ArrayList<>();
 
-    RecyclerView recyclerOrder;
-
-    ArrayList<OrderItem> list;
-
-    OrderAdapter adapter;
-
-    double total = 0;
-
-    DatabaseReference billRef;
+    ArrayList<Product> productList;
+    ProductAdapter adapter;
+    DatabaseReference productRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        // ÁNH XẠ VIEW
+        // ÁNH XẠ
         txtTable = findViewById(R.id.txtTable);
-        txtTotal = findViewById(R.id.txtTotal);
+        recyclerProduct = findViewById(R.id.recyclerProduct);
+        btnClear = findViewById(R.id.btnClear);
+        btnViewCart = findViewById(R.id.btnViewCart);
 
-        btnCafe = findViewById(R.id.btnCafe);
-        btnTraDao = findViewById(R.id.btnTraDao);
-        btnPayment = findViewById(R.id.btnPayment);
+        // =========================
+        // LẤY BÀN ĐÚNG CÁCH
+        // =========================
+        currentTable = getIntent().getStringExtra("table");
 
-        recyclerOrder = findViewById(R.id.recyclerOrder);
+        txtTable.setText(currentTable);
 
-        // FIREBASE
-        billRef = FirebaseDatabase
-                .getInstance()
-                .getReference("Bills");
+        // RECYCLER
+        recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
 
-        // NHẬN TÊN BÀN
-        String tableName =
-                getIntent().getStringExtra("table");
+        productList = new ArrayList<>();
 
-        txtTable.setText(tableName);
+        // FIREBASE PRODUCT
+        productRef = FirebaseDatabase.getInstance()
+                .getReference("Products");
 
-        // RECYCLERVIEW
-        recyclerOrder.setLayoutManager(
-                new LinearLayoutManager(this));
-
-        list = new ArrayList<>();
-
-        adapter = new OrderAdapter(list, () -> {
-            updateTotal();
+        adapter = new ProductAdapter(productList, product -> {
+            addToCart(product);
         });
 
-        recyclerOrder.setAdapter(adapter);
+        recyclerProduct.setAdapter(adapter);
 
-        // THÊM CAFE SỮA
-        btnCafe.setOnClickListener(v -> {
+        loadProducts();
 
-            addItem(
-                    "Cafe sữa",
-                    25000
-            );
+        // XÓA GIỎ HÀNG
+        btnClear.setOnClickListener(v -> {
+            cartList.clear();
+            Toast.makeText(this, "Đã xóa giỏ hàng", Toast.LENGTH_SHORT).show();
         });
 
-        // THÊM TRÀ ĐÀO
-        btnTraDao.setOnClickListener(v -> {
-
-            addItem(
-                    "Trà đào",
-                    30000
-            );
+        // XEM GIỎ HÀNG
+        btnViewCart.setOnClickListener(v -> {
+            startActivity(new Intent(this, CartActivity.class));
         });
-
-        // THANH TOÁN
-        btnPayment.setOnClickListener(v -> {
-
-            if(list.isEmpty()){
-
-                Toast.makeText(
-                        this,
-                        "Chưa có món để thanh toán",
-                        Toast.LENGTH_SHORT
-                ).show();
-
-                return;
-            }
-
-            android.app.AlertDialog.Builder builder =
-                    new android.app.AlertDialog.Builder(this);
-
-            builder.setTitle("Thanh toán");
-
-            builder.setMessage(
-                    "Xác nhận thanh toán hóa đơn?");
-
-            builder.setPositiveButton(
-                    "Thanh toán",
-                    (dialog, which) -> {
-
-                        // THỜI GIAN
-                        String time =
-                                new SimpleDateFormat(
-                                        "dd/MM/yyyy HH:mm",
-                                        Locale.getDefault())
-                                        .format(new Date());
-
-                        // TẠO BILL
-                        Bill bill =
-                                new Bill(
-                                        txtTable.getText()
-                                                .toString(),
-                                        total,
-                                        time,
-                                        list);
-
-                        // TẠO ID
-                        String id =
-                                billRef.push().getKey();
-
-                        // LƯU FIREBASE
-                        if(id != null){
-
-                            billRef.child(id)
-                                    .setValue(bill);
-                        }
-
-                        // RESET BÀN
-                        setResult(RESULT_OK);
-
-                        // THÔNG BÁO
-                        Toast.makeText(
-                                this,
-                                "Thanh toán thành công",
-                                Toast.LENGTH_SHORT
-                        ).show();
-
-                        // RESET DANH SÁCH
-                        list.clear();
-
-                        adapter.notifyDataSetChanged();
-
-                        // RESET TỔNG TIỀN
-                        total = 0;
-
-                        txtTotal.setText("Tổng: 0đ");
-
-                        // ĐÓNG ACTIVITY
-                        finish();
-
-                    });
-
-            builder.setNegativeButton(
-                    "Hủy",
-                    null);
-
-            builder.show();
-
-        });
-
     }
 
-    // HÀM THÊM MÓN
-    private void addItem(String name,
-                         double price){
+    // THÊM GIỎ HÀNG
+    private void addToCart(Product product) {
 
         boolean found = false;
 
-        for(OrderItem item : list){
-
-            if(item.getName().equals(name)){
-
-                item.setQuantity(
-                        item.getQuantity() + 1);
-
+        for (CartItem item : cartList) {
+            if (item.getName().equals(product.getName())) {
+                item.setQuantity(item.getQuantity() + 1);
                 found = true;
-
                 break;
             }
         }
 
-        if(!found){
-
-            list.add(
-                    new OrderItem(
-                            name,
-                            price,
-                            1
-                    )
-            );
+        if (!found) {
+            cartList.add(new CartItem(
+                    product.getName(),
+                    product.getPrice(),
+                    1
+            ));
         }
 
-        adapter.notifyDataSetChanged();
-
-        updateTotal();
+        Toast.makeText(this,
+                "Đã thêm " + product.getName(),
+                Toast.LENGTH_SHORT).show();
     }
 
-    // HÀM TÍNH TỔNG TIỀN
-    private void updateTotal(){
+    // LOAD PRODUCT FIREBASE
+    private void loadProducts() {
 
-        total = 0;
+        productRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-        for(OrderItem item : list){
+                productList.clear();
 
-            total += item.getPrice()
-                    * item.getQuantity();
-        }
+                for (DataSnapshot data : snapshot.getChildren()) {
 
-        txtTotal.setText(
-                "Tổng: " + total + "đ");
+                    Product product = data.getValue(Product.class);
+
+                    if (product != null) {
+                        productList.add(product);
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 }

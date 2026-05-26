@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="16dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="18dp"
     app:cardElevation="4dp">
 
     <LinearLayout
@@ -15,29 +16,31 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/txtBillTable"
+            android:id="@+id/txtTable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bàn 1"
-            android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#4E342E"/>
 
         <TextView
-            android:id="@+id/txtBillTotal"
+            android:id="@+id/txtTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="75000đ"
+            android:text="120000đ"
             android:textSize="18sp"
-            android:layout_marginTop="8dp"/>
+            android:textColor="#6D4C41"
+            android:layout_marginTop="6dp"/>
 
         <TextView
-            android:id="@+id/txtBillTime"
+            android:id="@+id/txtDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20/05/2026 20:15"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"/>
+            android:text="26/05/2026 14:20"
+            android:textColor="#757575"
+            android:layout_marginTop="6dp"/>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
