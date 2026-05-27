@@ -61,6 +61,7 @@ public class HistoryAdapter
                         .append(item.getQuantity())
                         .append("\n");
             }
+            holder.txtItems.setText(itemsText.toString());
         } else {
             itemsText.append("Không có dữ liệu món");
         }
@@ -104,7 +105,7 @@ public class HistoryAdapter
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtTable, txtTotal, txtDate;
+        TextView txtTable, txtTotal, txtDate, txtItems;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,6 +113,7 @@ public class HistoryAdapter
             txtTable = itemView.findViewById(R.id.txtTable);
             txtTotal = itemView.findViewById(R.id.txtTotal);
             txtDate = itemView.findViewById(R.id.txtDate);
+            txtItems = itemView.findViewById(R.id.txtItems);
         }
     }
 }

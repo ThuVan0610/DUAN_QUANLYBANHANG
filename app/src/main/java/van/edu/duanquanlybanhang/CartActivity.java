@@ -75,7 +75,7 @@ public class CartActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             updateTotal();
 
-            startActivity(new Intent(this, TableActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         });
     }
