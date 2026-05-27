@@ -11,7 +11,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- TITLE -->
         <TextView
             android:text="📊 DASHBOARD QUẢN LÝ"
             android:textSize="24sp"
@@ -20,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <!-- CARD 1: THỐNG KÊ -->
+        <!-- STATS -->
         <LinearLayout
             android:layout_marginTop="16dp"
             android:background="#FFFFFF"
@@ -31,35 +30,57 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/txtRevenue"
                 android:text="Doanh thu: 0đ"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold"/>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/txtOrderCount"
                 android:text="Số đơn: 0"
-                android:layout_marginTop="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_marginTop="8dp"/>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/txtItemCount"
                 android:text="Số món: 0"
-                android:layout_marginTop="8dp"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+
+        <!-- FILTER -->
+        <LinearLayout
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnToday"
+                android:text="Hôm nay"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnAll"
+                android:text="Tất cả"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <!-- CHART DOANH THU -->
+        <!-- CHART -->
         <TextView
-            android:text="📈 Biểu đồ doanh thu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📈 Doanh thu theo ngày"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="16dp"/>
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
@@ -67,36 +88,26 @@
             android:layout_height="220dp"
             android:layout_marginTop="8dp"/>
 
-        <!-- TOP MÓN -->
+        <!-- TOP -->
         <TextView
-            android:text="🏆 Top món / bàn bán chạy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🏆 Top món bán chạy"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="16dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTop"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_height="180dp"/>
 
-        <!-- FILTER BUTTON -->
-        <LinearLayout
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </LinearLayout>
-
-        <!-- LIST -->
+        <!-- ORDERS -->
         <TextView
-            android:text="Đơn gần đây"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🧾 Đơn gần đây"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="16dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerManager"

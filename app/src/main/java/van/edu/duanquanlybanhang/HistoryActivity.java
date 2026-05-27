@@ -1,7 +1,6 @@
 package van.edu.duanquanlybanhang;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
 
-    ImageView imgLogo;
     SearchView searchView;
     RecyclerView recyclerHistory;
 
@@ -32,7 +30,6 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        imgLogo = findViewById(R.id.imgLogo);
         searchView = findViewById(R.id.searchView);
         recyclerHistory = findViewById(R.id.recyclerHistory);
 
@@ -46,11 +43,29 @@ public class HistoryActivity extends AppCompatActivity {
         adapter = new HistoryAdapter(list);
         recyclerHistory.setAdapter(adapter);
 
-        // FIREBASE
-        DatabaseReference database =
+        loadData();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+                filterData(text);
+                return true;
+            }
+        });
+    }
+
+    // ================= FIREBASE =================
+    private void loadData() {
+
+        DatabaseReference db =
                 FirebaseDatabase.getInstance().getReference("orders");
 
-        database.addValueEventListener(new ValueEventListener() {
+        db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
@@ -73,36 +88,19 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {}
         });
-
-        // SEARCH
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String text) {
-                filterData(text);
-                return true;
-            }
-        });
     }
 
-    // =========================
-    // 🔥 FILTER CHÍNH
-    // =========================
+    // ================= SEARCH =================
     private void filterData(String text) {
 
         ArrayList<OrderModel> temp = new ArrayList<>();
-
         text = text.toLowerCase();
 
         for (OrderModel order : backupList) {
 
-            String table = order.getTable().toLowerCase();
-            String total = order.getTotal().toLowerCase();
-            String date = order.getDate().toLowerCase();
+            String table = safe(order.getTable());
+            String total = safe(order.getTotal());
+            String date  = safe(order.getDate());
 
             if (table.contains(text)
                     || total.contains(text)
@@ -115,18 +113,22 @@ public class HistoryActivity extends AppCompatActivity {
         adapter.updateData(temp);
     }
 
-    // (OPTION) lọc theo bàn riêng
+    // ================= FILTER TABLE =================
     private void filterByTable(String tableName) {
 
         ArrayList<OrderModel> temp = new ArrayList<>();
 
         for (OrderModel order : backupList) {
-
-            if (order.getTable().equalsIgnoreCase(tableName)) {
+            if (safe(order.getTable()).equalsIgnoreCase(tableName)) {
                 temp.add(order);
             }
         }
 
         adapter.updateData(temp);
+    }
+
+    // ================= SAFE STRING =================
+    private String safe(String s) {
+        return s == null ? "" : s.toLowerCase();
     }
 }

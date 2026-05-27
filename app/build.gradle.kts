@@ -43,7 +43,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
+    implementation("com.google.firebase:firebase-database:20.3.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

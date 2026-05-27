@@ -59,7 +59,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         // ➖ GIẢM
         holder.btnMinus.setOnClickListener(v -> {
 
-            if (item.getQuantity() > 1) {
+            if (item.getQuantity() > 0) {
                 item.setQuantity(item.getQuantity() - 1);
                 notifyItemChanged(position);
             }

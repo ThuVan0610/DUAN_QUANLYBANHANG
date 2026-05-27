@@ -43,9 +43,6 @@ public class CartActivity extends AppCompatActivity {
 
         updateTotal();
 
-        // =========================
-        // THANH TOÁN + FIREBASE
-        // =========================
         btnPayment.setOnClickListener(v -> {
 
             if (OrderActivity.cartList == null || OrderActivity.cartList.isEmpty()) {
@@ -62,14 +59,28 @@ public class CartActivity extends AppCompatActivity {
                     Locale.getDefault()
             ).format(new Date());
 
+            String dateOnly = new SimpleDateFormat(
+                    "dd/MM/yyyy",
+                    Locale.getDefault()
+            ).format(new Date());
+
+            int finalTotal = (int) total;
+
             OrderModel order = new OrderModel(
                     OrderActivity.currentTable,
-                    total + "đ",
+                    String.valueOf(finalTotal),
                     time,
-                    new ArrayList<>(OrderActivity.cartList)   // ⭐ QUAN TRỌNG
+                    dateOnly,
+                    new ArrayList<>(OrderActivity.cartList)
             );
 
-            db.child(orderId).setValue(order);
+            db.child(orderId).setValue(order)
+                    .addOnSuccessListener(aVoid ->
+                            Toast.makeText(this, "Đã lưu đơn", Toast.LENGTH_SHORT).show()
+                    )
+                    .addOnFailureListener(e ->
+                            Toast.makeText(this, "Lỗi Firebase", Toast.LENGTH_SHORT).show()
+                    );
 
             OrderActivity.cartList.clear();
             adapter.notifyDataSetChanged();
@@ -90,6 +101,6 @@ public class CartActivity extends AppCompatActivity {
             }
         }
 
-        txtTotal.setText("Tổng: " + total + "đ");
+        txtTotal.setText("Tổng: " + (int) total + "đ");
     }
 }

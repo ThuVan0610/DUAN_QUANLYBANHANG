@@ -18,17 +18,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 public class ManagerActivity extends AppCompatActivity {
 
-    TextView txtRevenue, txtOrderCount;
+    TextView txtRevenue, txtOrderCount, txtItemCount;
     BarChart chart;
 
-    RecyclerView recyclerTop;
-    TopProductAdapter adapter;
+    RecyclerView recyclerTop, recyclerManager;
+
+    TopProductAdapter topAdapter;
+    HistoryAdapter orderAdapter;
 
     ArrayList<OrderModel> orderList = new ArrayList<>();
     HashMap<String, Integer> productCount = new HashMap<>();
@@ -42,13 +42,20 @@ public class ManagerActivity extends AppCompatActivity {
 
         txtRevenue = findViewById(R.id.txtRevenue);
         txtOrderCount = findViewById(R.id.txtOrderCount);
+        txtItemCount = findViewById(R.id.txtItemCount);
         chart = findViewById(R.id.chart);
 
         recyclerTop = findViewById(R.id.recyclerTop);
-        recyclerTop.setLayoutManager(new LinearLayoutManager(this));
+        recyclerManager = findViewById(R.id.recyclerManager);
 
-        adapter = new TopProductAdapter(new ArrayList<>());
-        recyclerTop.setAdapter(adapter);
+        recyclerTop.setLayoutManager(new LinearLayoutManager(this));
+        recyclerManager.setLayoutManager(new LinearLayoutManager(this));
+
+        topAdapter = new TopProductAdapter(new ArrayList<>());
+        orderAdapter = new HistoryAdapter(new ArrayList<>());
+
+        recyclerTop.setAdapter(topAdapter);
+        recyclerManager.setAdapter(orderAdapter);
 
         loadOrders();
     }
@@ -69,53 +76,54 @@ public class ManagerActivity extends AppCompatActivity {
                 for (DataSnapshot data : snapshot.getChildren()) {
 
                     OrderModel o = data.getValue(OrderModel.class);
-
                     if (o == null) continue;
 
                     orderList.add(o);
 
-                    // =========================
-                    // 💰 REVENUE SAFE PARSE
-                    // =========================
-                    String clean = o.getTotal()
-                            .replace("đ", "")
-                            .replace(".", "")
-                            .trim();
+                    // ================= SAFE REVENUE =================
+                    String total = o.getTotal();
+                    if (total != null) {
+                        try {
+                            revenue += Integer.parseInt(
+                                    total.replace("đ", "")
+                                            .replace(".", "")
+                                            .trim()
+                            );
+                        } catch (Exception ignored) {}
+                    }
 
-                    try {
-                        revenue += Integer.parseInt(clean);
-                    } catch (Exception ignored) {}
-
-                    // =========================
-                    // 🏆 TOP (THEO MÓN)
-                    // =========================
+                    // ================= TOP ITEM =================
                     if (o.getItems() != null) {
                         for (CartItem item : o.getItems()) {
 
-                            String name = item.getName();
-                            int qty = item.getQuantity();
+                            if (item.getName() == null) continue;
 
-                            productCount.put(name,
-                                    productCount.getOrDefault(name, 0) + qty);
+                            productCount.put(
+                                    item.getName(),
+                                    productCount.getOrDefault(item.getName(), 0)
+                                            + item.getQuantity()
+                            );
                         }
                     }
                 }
 
                 txtRevenue.setText("Doanh thu: " + revenue + "đ");
                 txtOrderCount.setText("Số đơn: " + orderList.size());
+                txtItemCount.setText("Số món: " + productCount.size());
 
                 updateTopProducts();
                 updateChart();
+
+                orderAdapter.updateData(new ArrayList<>(orderList));
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {}
+            public void onCancelled(DatabaseError error) {
+                // tránh crash
+            }
         });
     }
 
-    // =========================
-    // 🏆 TOP MÓN BÁN CHẠY
-    // =========================
     private void updateTopProducts() {
 
         ArrayList<TopItem> list = new ArrayList<>();
@@ -124,31 +132,28 @@ public class ManagerActivity extends AppCompatActivity {
             list.add(new TopItem(key, productCount.get(key)));
         }
 
-        // sort giảm dần
-        Collections.sort(list, (a, b) ->
-                Integer.compare(b.getCount(), a.getCount()));
-
-        adapter.update(list);
+        topAdapter.update(list);
     }
 
-    // =========================
-    // 📊 CHART DOANH THU
-    // =========================
     private void updateChart() {
 
         ArrayList<BarEntry> entries = new ArrayList<>();
-
         int i = 0;
 
         for (OrderModel o : orderList) {
 
-            String clean = o.getTotal()
-                    .replace("đ", "")
-                    .replace(".", "")
-                    .trim();
+            String total = o.getTotal();
+            if (total == null) continue;
 
             try {
-                entries.add(new BarEntry(i++, Integer.parseInt(clean)));
+                int value = Integer.parseInt(
+                        total.replace("đ", "")
+                                .replace(".", "")
+                                .trim()
+                );
+
+                entries.add(new BarEntry(i++, value));
+
             } catch (Exception ignored) {}
         }
 
