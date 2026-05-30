@@ -51,7 +51,7 @@ public class HistoryAdapter
         holder.txtTotal.setText(order.getTotal());
         holder.txtDate.setText(order.getDate());
 
-        // ⭐ CHÈN HIỂN THỊ MÓN
+        // CHÈN HIỂN THỊ MÓN
         StringBuilder itemsText = new StringBuilder();
 
         if (order.getItems() != null) {

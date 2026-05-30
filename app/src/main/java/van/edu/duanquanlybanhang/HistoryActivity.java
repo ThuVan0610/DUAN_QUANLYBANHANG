@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -61,58 +62,48 @@ public class HistoryActivity extends AppCompatActivity {
 
     // ================= FIREBASE =================
     private void loadData() {
-
         DatabaseReference db =
                 FirebaseDatabase.getInstance().getReference("orders");
-
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
                 list.clear();
                 backupList.clear();
-
                 for (DataSnapshot data : snapshot.getChildren()) {
-
                     OrderModel order = data.getValue(OrderModel.class);
-
                     if (order != null) {
                         list.add(order);
                         backupList.add(order);
                     }
                 }
-
+                // Đảo ngược danh sách để đơn mới nhất lên đầu
+                Collections.reverse(list);
+                Collections.reverse(backupList);
                 adapter.updateData(new ArrayList<>(list));
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {}
+            public void onCancelled(DatabaseError error) {
+            }
         });
     }
 
     // ================= SEARCH =================
     private void filterData(String text) {
-
         ArrayList<OrderModel> temp = new ArrayList<>();
         text = text.toLowerCase();
-
         for (OrderModel order : backupList) {
-
             String table = safe(order.getTable());
             String total = safe(order.getTotal());
-            String date  = safe(order.getDate());
-
+            String date = safe(order.getDate());
             if (table.contains(text)
                     || total.contains(text)
                     || date.contains(text)) {
-
                 temp.add(order);
             }
         }
-
         adapter.updateData(temp);
     }
-
     // ================= FILTER TABLE =================
     private void filterByTable(String tableName) {
 
