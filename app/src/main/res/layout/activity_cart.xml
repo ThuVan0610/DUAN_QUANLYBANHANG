@@ -39,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tổng: 0đ"
+            android:text="Tổng: 0.0đ"
             android:textColor="#4E342E"
             android:textSize="24sp"
             android:textStyle="bold"/>

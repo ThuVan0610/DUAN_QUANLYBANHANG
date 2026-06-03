@@ -101,6 +101,6 @@ public class CartActivity extends AppCompatActivity {
             }
         }
 
-        txtTotal.setText("Tổng: " + (int) total + "đ");
+        txtTotal.setText("Tổng: " + (int) total + ".0đ");
     }
 }

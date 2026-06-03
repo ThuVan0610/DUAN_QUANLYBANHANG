@@ -44,13 +44,13 @@ public class OrderActivity extends AppCompatActivity {
         btnViewCart = findViewById(R.id.btnViewCart);
 
         // =========================
-        // LẤY BÀN ĐÚNG CÁCH
+        // LẤY BÀN ĐÚNG CÁCH, chọn bàn sẽ được lưu
         // =========================
         currentTable = getIntent().getStringExtra("table");
 
         txtTable.setText(currentTable);
 
-        // RECYCLER
+        // RECYCLER hiển thị danh sách theo chiều dọc
         recyclerProduct.setLayoutManager(new LinearLayoutManager(this));
 
         productList = new ArrayList<>();
