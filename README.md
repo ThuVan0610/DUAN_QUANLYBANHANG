@@ -1,6 +1,7 @@
 # DUAN_QUANLYBANHANG
 Dự án thi cuối kỳ 2 môn Lập trình thiết bị di động 
 App quản lý bán hàng sử dụng Firebase và Android Studio
+Video : https://drive.google.com/file/d/1REuQ6UjTdjpMWjj3l6djU4KoJ49AkCXH/view?usp=sharing
 1. Trang đầu tiên là trang login
    - Đăng nhập bằng email và password được tạo sẵn trong Firebase. Đăng nhập thành công  sẽ được chuyển sang trang chủ.
    
@@ -40,5 +41,6 @@ App quản lý bán hàng sử dụng Firebase và Android Studio
    - Đăng xuất: khi click vào sẽ đăng xuất tài khoản và chuyển sang trang login.
       
 <img width="371" height="818" alt="image" src="https://github.com/user-attachments/assets/05b698e9-42b2-4f07-a133-7b7cf69b480c" />
+
 
    
